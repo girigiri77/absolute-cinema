@@ -102,16 +102,20 @@ const ControlRoom: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     weekly: movies.filter(m => m.isWeeklyRelease).length,
   }), [movies]);
 
-  const handleSubmit = (data: Omit<Movie, "id" | "createdAt">) => {
-    if (editing) {
-      updateMovie(editing.id, data);
-      notify("Movie updated", `${data.title} is live everywhere.`);
-    } else {
-      addMovie(data);
-      notify("Movie added", `${data.title} now appears on the public site.`);
+  const handleSubmit = async (data: Omit<Movie, "id" | "createdAt">) => {
+    try {
+      if (editing) {
+        await updateMovie(editing.id, data);
+        notify("Movie updated", `${data.title} is live everywhere.`);
+      } else {
+        await addMovie(data);
+        notify("Movie added", `${data.title} now appears on the public site.`);
+      }
+      setShowForm(false);
+      setEditing(null);
+    } catch (err) {
+      notify("Operation failed", err instanceof Error ? err.message : "Failed to save movie", "danger");
     }
-    setShowForm(false);
-    setEditing(null);
   };
 
   const startEdit = (m: Movie) => {
@@ -124,15 +128,23 @@ const ControlRoom: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     setShowForm(true);
   };
 
-  const removeOne = (m: Movie) => {
+  const removeOne = async (m: Movie) => {
     if (!confirm(`Delete "${m.title}" from the catalog?`)) return;
-    deleteMovie(m.id);
-    notify("Movie deleted", `${m.title} was removed everywhere.`, "danger");
+    try {
+      await deleteMovie(m.id);
+      notify("Movie deleted", `${m.title} was removed everywhere.`, "danger");
+    } catch (err) {
+      notify("Delete failed", err instanceof Error ? err.message : "Failed to delete movie", "danger");
+    }
   };
 
-  const toggleSection = (key: keyof typeof toggles, value: boolean) => {
-    setToggles({ ...toggles, [key]: value });
-    notify("Homepage section updated", `${sectionLabel(key)} is now ${value ? "visible" : "hidden"}.`, "info");
+  const toggleSection = async (key: keyof typeof toggles, value: boolean) => {
+    try {
+      await setToggles({ ...toggles, [key]: value });
+      notify("Homepage section updated", `${sectionLabel(key)} is now ${value ? "visible" : "hidden"}.`, "info");
+    } catch (err) {
+      notify("Update failed", err instanceof Error ? err.message : "Failed to update section", "danger");
+    }
   };
 
   return (
@@ -217,10 +229,14 @@ const ControlRoom: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (confirm("Reset to initial seed data?")) {
-                  resetData();
-                  notify("Demo catalog restored", "The shared catalog was reset.", "info");
+                  try {
+                    await resetData();
+                    notify("Demo catalog restored", "The shared catalog was reset.", "info");
+                  } catch (err) {
+                    notify("Reset failed", err instanceof Error ? err.message : "Failed to reset data", "danger");
+                  }
                 }
               }}
               className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/75 hover:bg-white/10"
@@ -316,10 +332,10 @@ const Field: React.FC<{ label: string; children: React.ReactNode }> = ({ label, 
 const MoodDiscoveryManager: React.FC<{
   moods: MoodCategory[];
   movies: Movie[];
-  onAddMood: (mood: MoodDraft) => MoodCategory;
-  onUpdateMood: (id: string, patch: Partial<MoodCategory>) => void;
-  onDeleteMood: (id: string) => void;
-  onReorderMoods: (ids: string[]) => void;
+  onAddMood: (mood: MoodDraft) => Promise<void>;
+  onUpdateMood: (id: string, patch: Partial<MoodCategory>) => Promise<void>;
+  onDeleteMood: (id: string) => Promise<void>;
+  onReorderMoods: (ids: string[]) => Promise<void>;
   notify: (title: string, detail?: string, tone?: ToastTone) => void;
 }> = ({ moods, movies, onAddMood, onUpdateMood, onDeleteMood, onReorderMoods, notify }) => {
   const sortedMoods = useMemo(() => [...moods].sort((a, b) => a.sortOrder - b.sortOrder), [moods]);
@@ -378,20 +394,24 @@ const MoodDiscoveryManager: React.FC<{
     setMovieSearch("");
   };
 
-  const saveMood = () => {
+  const saveMood = async () => {
     if (!draft?.label.trim()) {
       alert("Mood name is required.");
       return;
     }
-    const moodId = editing?.id || uniqueMoodId(draft.label, moods);
-    if (editing) {
-      onUpdateMood(editing.id, { ...draft, linkedMovieIds, updatedAt: Date.now() });
-      notify("Mood updated", `${draft.label} is live on the homepage.`);
-    } else {
-      onAddMood({ ...draft, id: moodId, linkedMovieIds });
-      notify("Mood created", `${draft.label} now appears in Mood Discovery.`);
+    try {
+      const moodId = editing?.id || uniqueMoodId(draft.label, moods);
+      if (editing) {
+        await onUpdateMood(editing.id, { ...draft, linkedMovieIds, updatedAt: Date.now() });
+        notify("Mood updated", `${draft.label} is live on the homepage.`);
+      } else {
+        await onAddMood({ ...draft, id: moodId, linkedMovieIds });
+        notify("Mood created", `${draft.label} now appears in Mood Discovery.`);
+      }
+      closeForm();
+    } catch (err) {
+      notify("Save failed", err instanceof Error ? err.message : "Failed to save mood", "danger");
     }
-    closeForm();
   };
 
   const toggleLinkedMovie = (movieId: string) => {
@@ -412,14 +432,18 @@ const MoodDiscoveryManager: React.FC<{
     setLinkedDragId(null);
   };
 
-  const removeMood = (mood: MoodCategory) => {
+  const removeMood = async (mood: MoodCategory) => {
     if (!confirm(`Delete mood "${mood.label}"? This removes the tag from linked movies.`)) return;
-    onDeleteMood(mood.id);
-    notify("Mood deleted", `${mood.label} was removed from Mood Discovery.`, "danger");
-    if (editing?.id === mood.id) closeForm();
+    try {
+      await onDeleteMood(mood.id);
+      notify("Mood deleted", `${mood.label} was removed from Mood Discovery.`, "danger");
+      if (editing?.id === mood.id) closeForm();
+    } catch (err) {
+      notify("Delete failed", err instanceof Error ? err.message : "Failed to delete mood", "danger");
+    }
   };
 
-  const onDropMood = (targetId: string) => {
+  const onDropMood = async (targetId: string) => {
     if (!draggedId || draggedId === targetId) return;
     const ids = sortedMoods.map(m => m.id);
     const from = ids.indexOf(draggedId);
@@ -428,9 +452,13 @@ const MoodDiscoveryManager: React.FC<{
     const next = [...ids];
     const [moved] = next.splice(from, 1);
     next.splice(to, 0, moved);
-    onReorderMoods(next);
-    setDraggedId(null);
-    notify("Mood order updated", "Homepage mood card order has been saved.", "info");
+    try {
+      await onReorderMoods(next);
+      setDraggedId(null);
+      notify("Mood order updated", "Homepage mood card order has been saved.", "info");
+    } catch (err) {
+      notify("Reorder failed", err instanceof Error ? err.message : "Failed to reorder moods", "danger");
+    }
   };
 
   return (
@@ -599,7 +627,7 @@ const MoodDiscoveryManager: React.FC<{
                 </div>
 
                 <div className="space-y-4">
-                  <ImageUpload label="Featured Banner Image" value={draft.bannerImage || ""} onChange={(v) => setDraft(d => d && ({ ...d, bannerImage: v }))} aspect="backdrop" hint="Optional" />
+                  <ImageUpload label="Featured Banner Image" value={draft.bannerImage || ""} onChange={(v) => setDraft(d => d && ({ ...d, bannerImage: v }))} aspect="backdrop" hint="Optional" movieId={editing?.id} />
                   <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-4">
                     <div className={"pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-to-br opacity-30 blur-2xl " + draft.color} />
                     <div className="relative">

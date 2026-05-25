@@ -93,6 +93,7 @@ const MovieForm: React.FC<Props> = ({ initial, onCancel, onSubmit }) => {
           onChange={(v) => setData(d => ({ ...d, poster: v }))}
           aspect="poster"
           hint="Required"
+          movieId={initial?.id}
         />
         <ImageUpload
           label="Backdrop Upload"
@@ -100,6 +101,7 @@ const MovieForm: React.FC<Props> = ({ initial, onCancel, onSubmit }) => {
           onChange={(v) => setData(d => ({ ...d, backdrop: v }))}
           aspect="backdrop"
           hint="Optional"
+          movieId={initial?.id}
         />
       </div>
 

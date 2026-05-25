@@ -16,7 +16,7 @@ import type { Movie } from "../types";
 import { getMoviesForMood } from "../utils/moodCollections";
 
 const HomePage: React.FC = () => {
-  const { movies, moods, toggles } = useMovies();
+  const { movies, moods, toggles, loading, error } = useMovies();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mood, setMood] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -83,6 +83,41 @@ const HomePage: React.FC = () => {
       window.setTimeout(() => scrollTo("mood-results"), 0);
     }
   }, [scrollTo]);
+
+  if (loading) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-x-hidden">
+        <div className="pointer-events-none fixed inset-0 -z-10 no-x-overflow">
+          <div className="absolute inset-0 cinema-radial" />
+        </div>
+        <div className="text-center">
+          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-fuchsia-500/30 border-t-fuchsia-500 mx-auto" />
+          <p className="text-white/60 text-lg">Loading your cinema...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-x-hidden">
+        <div className="pointer-events-none fixed inset-0 -z-10 no-x-overflow">
+          <div className="absolute inset-0 cinema-radial" />
+        </div>
+        <div className="text-center max-w-md px-4">
+          <div className="mb-4 text-6xl">⚠️</div>
+          <h2 className="text-2xl font-bold text-white mb-2">Failed to load data</h2>
+          <p className="text-white/60 mb-6">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-purple-600 px-6 py-3 text-sm font-bold text-white hover:scale-[1.02] transition"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">

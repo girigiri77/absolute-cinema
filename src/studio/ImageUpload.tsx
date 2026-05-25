@@ -1,40 +1,56 @@
 import React, { useCallback, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, X, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Loader2, AlertCircle } from "lucide-react";
+import { uploadImage, replaceImage, isSupabaseStorageUrl, type ImageType } from "../utils/storage";
 
 type Props = {
   label: string;
   value?: string;
-  onChange: (dataUrl: string) => void;
+  onChange: (url: string) => void;
   aspect?: "poster" | "backdrop";
   hint?: string;
+  movieId?: string;
 };
 
 const accept = "image/jpeg,image/png,image/webp";
 
-const ImageUpload: React.FC<Props> = ({ label, value, onChange, aspect = "poster", hint }) => {
+const ImageUpload: React.FC<Props> = ({ label, value, onChange, aspect = "poster", hint, movieId }) => {
   const [dragging, setDragging] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = useCallback((file: File) => {
+  const handleFile = useCallback(async (file: File) => {
     if (!file.type.match(/jpeg|png|webp/)) {
-      alert("Only JPG, PNG, WEBP are supported.");
+      setError("Only JPG, PNG, WEBP are supported.");
       return;
     }
-    if (file.size > 4 * 1024 * 1024) {
-      alert("Max 4MB image size.");
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Max 5MB image size.");
       return;
     }
+
+    setError(null);
     setLoading(true);
-    const reader = new FileReader();
-    reader.onload = () => {
-      onChange(String(reader.result));
+
+    try {
+      let imageUrl: string;
+      
+      if (value && isSupabaseStorageUrl(value)) {
+        // Replace existing image
+        imageUrl = await replaceImage(value, file, aspect as ImageType, movieId);
+      } else {
+        // Upload new image
+        imageUrl = await uploadImage(file, aspect as ImageType, movieId);
+      }
+
+      onChange(imageUrl);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload image");
+    } finally {
       setLoading(false);
-    };
-    reader.onerror = () => setLoading(false);
-    reader.readAsDataURL(file);
-  }, [onChange]);
+    }
+  }, [onChange, aspect, value, movieId]);
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -49,6 +65,17 @@ const ImageUpload: React.FC<Props> = ({ label, value, onChange, aspect = "poster
         <label className="text-xs font-semibold uppercase tracking-wider text-white/55">{label}</label>
         {hint && <span className="text-[10px] text-white/35">{hint}</span>}
       </div>
+      
+      {error && (
+        <div className="mb-2 flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+          <AlertCircle className="h-3.5 w-3.5" />
+          <span>{error}</span>
+          <button onClick={() => setError(null)} className="ml-auto text-red-200 hover:text-white">
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      )}
+
       <div
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
@@ -87,7 +114,7 @@ const ImageUpload: React.FC<Props> = ({ label, value, onChange, aspect = "poster
               <span className="text-white">Drop image</span> or
               <span className="ml-1 text-fuchsia-300 underline">browse</span>
             </div>
-            <div className="text-[10px] uppercase tracking-wider text-white/35">JPG • PNG • WEBP</div>
+            <div className="text-[10px] uppercase tracking-wider text-white/35">JPG • PNG • WEBP (Max 5MB)</div>
           </button>
         )}
 
