@@ -74,6 +74,12 @@ const HomePage: React.FC = () => {
 
   const handleExploreMoods = () => scrollTo("moods");
   const handleBrowseFilms = () => scrollTo("releases");
+  const handleScrollToContent = () => {
+    const firstSection = document.querySelector("section[id]") as HTMLElement;
+    if (firstSection) {
+      firstSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
   const moodLabel = mood ? moods.find(m => m.id === mood)?.label || mood : null;
   const activeResultCount = mood ? selectedMoodMovies.length : searchMovies.length;
   const selectMovie = useCallback((movie: Movie) => setSelectedId(movie.id), []);
@@ -133,6 +139,7 @@ const HomePage: React.FC = () => {
       <Hero
         onExploreMoods={handleExploreMoods}
         onBrowseFilms={handleBrowseFilms}
+        onScrollToContent={handleScrollToContent}
       />
 
       {/* Filter banner when filters are active */}

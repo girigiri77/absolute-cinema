@@ -7,9 +7,10 @@ import LightStreaks from "../components/effects/LightStreaks";
 type Props = {
   onExploreMoods: () => void;
   onBrowseFilms: () => void;
+  onScrollToContent: () => void;
 };
 
-const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms }) => {
+const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms, onScrollToContent }) => {
   return (
     <section className="relative isolate h-[100svh] min-h-[640px] w-full overflow-hidden">
       {/* Pure brand poster: no movies, actors, franchises, posters, or metadata. */}
@@ -49,6 +50,20 @@ const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms }) => {
         />
         <div className="pointer-events-none absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-fuchsia-600/20 blur-[110px]" />
         <div className="pointer-events-none absolute -right-24 bottom-1/4 h-80 w-80 rounded-full bg-blue-600/18 blur-[120px]" />
+        
+        {/* Cinematic gradient fade into next section */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#07050d] via-[#07050d]/70 to-transparent pointer-events-none" />
+        
+        {/* Content tease - blurred movie card edges at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 overflow-hidden pointer-events-none">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-3 opacity-20 blur-[2px]">
+            <div className="w-12 h-16 bg-gradient-to-b from-fuchsia-500/30 to-purple-600/20 rounded-t-lg" />
+            <div className="w-12 h-16 bg-gradient-to-b from-purple-500/30 to-blue-600/20 rounded-t-lg" />
+            <div className="w-12 h-16 bg-gradient-to-b from-blue-500/30 to-fuchsia-600/20 rounded-t-lg" />
+            <div className="w-12 h-16 bg-gradient-to-b from-fuchsia-500/30 to-purple-600/20 rounded-t-lg" />
+            <div className="w-12 h-16 bg-gradient-to-b from-purple-500/30 to-blue-600/20 rounded-t-lg" />
+          </div>
+        </div>
         </div>
 
       {/* Light streaks & particles */}
@@ -72,6 +87,65 @@ const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms }) => {
             "Find what to watch tonight."
           </p>
 
+          {/* Cinematic scroll guidance */}
+          <div className="flex justify-center">
+            <motion.button
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.8 }}
+              onClick={onScrollToContent}
+              className="group relative mt-6 flex flex-col items-center gap-2 cursor-pointer"
+            >
+              {/* Glowing divider line */}
+              <motion.div
+                animate={{ 
+                  opacity: [0.3, 0.6, 0.3],
+                  scaleX: [0.8, 1, 0.8]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="w-16 h-px bg-gradient-to-r from-transparent via-fuchsia-400/60 to-transparent"
+              />
+              
+              {/* Soft ambient glow behind text */}
+              <motion.div
+                animate={{ 
+                  opacity: [0.1, 0.2, 0.1]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 bg-fuchsia-500/10 blur-xl rounded-full pointer-events-none"
+              />
+              
+              <div className="relative flex items-center gap-2">
+                {/* Animated arrow */}
+                <motion.div
+                  animate={{ y: [0, 5, 0] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                  whileHover={{ y: [0, 8, 0] }}
+                  className="relative"
+                >
+                  <motion.div
+                    animate={{ 
+                      opacity: [0.3, 0.6, 0.3]
+                    }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute inset-0 bg-fuchsia-400/30 blur-sm rounded-full"
+                  />
+                  <ChevronDown className="relative h-4 w-4 text-fuchsia-200/90 group-hover:text-fuchsia-100 transition-colors duration-500" />
+                </motion.div>
+                
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.9 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="relative text-sm uppercase tracking-[0.2em] text-white font-medium group-hover:text-white transition-colors duration-500"
+                >
+                  Scroll down to see new updates
+                </motion.span>
+              </div>
+            </motion.button>
+          </div>
+
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-10">
             <button
               onClick={onExploreMoods}
@@ -87,17 +161,6 @@ const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms }) => {
               <Film className="h-4 w-4" />
               Browse Films
             </button>
-          </div>
-        </motion.div>
-
-        {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-          className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 md:flex"
-        >
-          <div className="flex flex-col items-center gap-1 text-xs text-white/50">
-            <span className="tracking-[0.3em]">SCROLL</span>
-            <ChevronDown className="h-4 w-4 animate-bounce" />
           </div>
         </motion.div>
       </div>
