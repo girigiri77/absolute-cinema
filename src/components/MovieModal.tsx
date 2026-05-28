@@ -139,13 +139,20 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
                 <button
                   onClick={onClose}
                   aria-label="Close"
-                  className="absolute -top-3 -right-3 md:top-4 md:right-4 z-10 rounded-full bg-black/60 p-2 text-white ring-1 ring-white/15 backdrop-blur hover:bg-black/80"
+                  className="hidden md:flex absolute top-4 right-4 z-10 items-center justify-center rounded-full bg-black/60 p-2 text-white ring-1 ring-white/15 backdrop-blur hover:bg-black/80"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
-              <div className="grid flex-shrink-0 gap-4 p-4 pb-10 sm:gap-6 sm:p-6 sm:pb-12 md:grid-cols-[160px_1fr] md:p-8 md:pb-12">
+              <div className="grid flex-shrink-0 gap-4 p-4 pb-10 sm:gap-6 sm:p-6 sm:pb-12 md:grid-cols-[160px_1fr] md:p-8 md:pb-12 relative">
+                <button
+                  onClick={onClose}
+                  aria-label="Close"
+                  className="md:hidden absolute top-4 right-4 z-10 flex items-center justify-center rounded-full bg-black/60 p-2 text-white ring-1 ring-white/15 backdrop-blur hover:bg-black/80"
+                >
+                  <X className="h-5 w-5" />
+                </button>
                 <div className="hidden md:block">
                   <div className="overflow-hidden rounded-xl border border-white/10 shadow-[0_20px_50px_-20px_rgba(168,85,247,0.5)]">
                     <img
