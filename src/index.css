@@ -183,3 +183,8 @@ img { -webkit-user-drag: none; user-select: none; }
     border-right: none !important;
   }
 }
+
+/* Remove tap highlight on buttons for mobile */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
