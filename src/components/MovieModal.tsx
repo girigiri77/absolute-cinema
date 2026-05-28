@@ -139,7 +139,7 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
                 <button
                   onClick={onClose}
                   aria-label="Close"
-                  className="absolute right-3 top-3 z-10 rounded-full bg-black/60 p-2 text-white ring-1 ring-white/15 backdrop-blur hover:bg-black/80"
+                  className="absolute -top-3 -right-3 md:top-4 md:right-4 z-10 rounded-full bg-black/60 p-2 text-white ring-1 ring-white/15 backdrop-blur hover:bg-black/80"
                 >
                   <X className="h-5 w-5" />
                 </button>
