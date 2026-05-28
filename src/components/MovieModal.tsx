@@ -114,7 +114,7 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
               className="relative z-10 mx-auto flex min-h-fit max-h-[90vh] sm:max-h-[85vh] w-full max-w-6xl flex-col overflow-y-auto rounded-2xl sm:rounded-3xl border border-white/10 bg-[#08060f] shadow-[0_50px_120px_-20px_rgba(168,85,247,0.4)] [scrollbar-color:rgba(217,70,239,0.65)_rgba(255,255,255,0.06)] [scrollbar-width:thin]"
             >
               {/* Backdrop / Trailer area */}
-              <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden">
+              <div className="relative aspect-[16/10] md:aspect-video w-full flex-shrink-0 overflow-hidden">
                 {movie.trailerUrl ? (
                   <iframe
                     src={
