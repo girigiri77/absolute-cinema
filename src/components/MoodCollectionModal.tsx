@@ -27,19 +27,23 @@ const MoodCollectionModal: React.FC<Props> = ({ mood, movies, onClose, onSelectM
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[90] overflow-y-auto bg-black/80 p-4 backdrop-blur-xl md:p-8"
         >
-          <button className="fixed inset-0 cursor-default" onClick={onClose} aria-label="Close mood collection" />
+          <button className="fixed inset-0 z-40 cursor-default" onClick={onClose} aria-label="Close mood collection" />
           <motion.div
             initial={{ y: 30, opacity: 0, scale: 0.98 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 30, opacity: 0, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 220, damping: 26 }}
-            className="relative mx-auto my-6 max-w-6xl overflow-hidden rounded-3xl border border-white/10 bg-[#08060f] shadow-[0_50px_140px_-30px_rgba(168,85,247,0.65)]"
+            className="relative z-50 mx-auto my-6 max-w-6xl overflow-hidden rounded-3xl border border-white/10 bg-[#08060f] shadow-[0_50px_140px_-30px_rgba(168,85,247,0.65)] pointer-events-auto"
           >
             <div className="relative min-h-[260px] overflow-hidden p-6 md:p-8">
-              {mood.bannerImage && <img src={mood.bannerImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />}
-              <div className={"absolute -right-20 -top-24 h-72 w-72 rounded-full bg-gradient-to-br blur-[90px] " + mood.color} />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#08060f] via-[#08060f]/82 to-[#08060f]/35" />
-              <button onClick={onClose} className="absolute right-4 top-4 rounded-full border border-white/10 bg-black/45 p-2 text-white/75 backdrop-blur hover:bg-black/70 hover:text-white" aria-label="Close">
+              {mood.bannerImage && <img src={mood.bannerImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35 pointer-events-none" />}
+              <div className={"absolute -right-20 -top-24 h-72 w-72 rounded-full bg-gradient-to-br blur-[90px] pointer-events-none " + mood.color} />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#08060f] via-[#08060f]/82 to-[#08060f]/35 pointer-events-none" />
+              <button
+                onClick={onClose}
+                onPointerUp={onClose}
+                className="absolute top-4 right-4 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-black/40 text-white touch-manipulation"
+              >
                 <X className="h-5 w-5" />
               </button>
               <div className="relative max-w-3xl">
