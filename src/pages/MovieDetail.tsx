@@ -175,10 +175,10 @@ const MovieDetail: React.FC = () => {
             Back to Home
           </button>
 
-          <div className="grid gap-6 md:gap-8 md:grid-cols-[200px_1fr]">
+          <div className="flex flex-col gap-6 md:grid md:gap-8 md:grid-cols-[200px_1fr]">
             {/* Poster */}
-            <div className="order-2 md:order-1">
-              <div className="overflow-hidden rounded-xl border border-white/10 shadow-[0_20px_50px_-20px_rgba(168,85,247,0.5)]">
+            <div className="flex justify-center md:contents">
+              <div className="overflow-hidden rounded-xl border border-white/10 shadow-[0_20px_50px_-20px_rgba(168,85,247,0.5)] w-[180px] sm:w-[200px] md:w-full">
                 <img
                   src={movie.poster}
                   alt={movie.title}
@@ -188,7 +188,7 @@ const MovieDetail: React.FC = () => {
             </div>
 
             {/* Movie Details */}
-            <div className="min-w-0 order-1 md:order-2">
+            <div className="min-w-0">
               <h1 className="text-3xl font-bold text-white md:text-4xl">
                 {movie.title}
               </h1>
