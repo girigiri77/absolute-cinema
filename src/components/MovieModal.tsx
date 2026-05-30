@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Star, Clock, Calendar, Play, Plus, Share2 } from "lucide-react";
 import type { Movie } from "../types";
 import { useMovies } from "../context/MoviesContext";
+import { formatRuntime, formatReleaseDate } from "../utils/runtime";
 
 type Props = {
   movie: Movie | null;
@@ -66,7 +67,7 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
             name="keywords"
             content={`${movie.title}, OTT release, ${movie.platforms.join(
               ", "
-            )}, Telugu movies, Netflix, Prime Video, Disney Hotstar, streaming`}
+            )}, Telugu movies, Netflix, Prime Video, JioHotstar, streaming`}
           />
 
           <meta
@@ -177,13 +178,13 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
 
                     <span className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      {movie.releaseDate || movie.year}
+                      {movie.releaseDate ? formatReleaseDate(movie.releaseDate) : movie.year}
                     </span>
 
                     {movie.runtime ? (
                       <span className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
-                        {movie.runtime}m
+                        {formatRuntime(movie.runtime)}
                       </span>
                     ) : null}
 

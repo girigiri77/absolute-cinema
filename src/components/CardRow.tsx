@@ -6,13 +6,14 @@ import type { Movie } from "../types";
 
 type Props = {
   movies: Movie[];
-  onSelect: (m: Movie) => void;
   showNew?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
+  gap?: "sm" | "md" | "lg";
   emptyText?: string;
 };
 
-const CardRow: React.FC<Props> = ({ movies, onSelect, showNew, size, emptyText }) => {
+const CardRow: React.FC<Props> = ({ movies, showNew, size, gap = "md", emptyText }) => {
+  const gapCls = gap === "sm" ? "gap-3 sm:gap-4" : gap === "lg" ? "gap-5 sm:gap-6" : "gap-4 sm:gap-5";
   const ref = useRef<HTMLDivElement>(null);
 
   const scrollBy = (dir: number) => {
@@ -50,11 +51,11 @@ const CardRow: React.FC<Props> = ({ movies, onSelect, showNew, size, emptyText }
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.6 }}
-        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-4"
+        className={"no-scrollbar flex snap-x snap-mandatory " + gapCls + " overflow-x-auto scroll-smooth pb-4 px-1 w-full"}
       >
         {movies.map(m => (
-          <div key={m.id} className="snap-start">
-            <MovieCard movie={m} onClick={onSelect} showNew={showNew} size={size} />
+          <div key={m.id} className="snap-start flex-shrink-0">
+            <MovieCard movie={m} showNew={showNew} size={size} />
           </div>
         ))}
       </motion.div>

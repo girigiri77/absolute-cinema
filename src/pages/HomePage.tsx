@@ -8,22 +8,15 @@ import MoodDiscovery from "../sections/MoodDiscovery";
 import Trending from "../sections/Trending";
 import TeluguPicks from "../sections/TeluguPicks";
 import Footer from "../sections/Footer";
-import MovieModal from "../components/MovieModal";
 import MoodCollectionModal from "../components/MoodCollectionModal";
 import CardRow from "../components/CardRow";
 import SectionHeader from "../components/SectionHeader";
-import type { Movie } from "../types";
 import { getMoviesForMood } from "../utils/moodCollections";
 
 const HomePage: React.FC = () => {
   const { movies, moods, toggles, loading, error } = useMovies();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mood, setMood] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const selected = useMemo(
-    () => movies.find(m => m.id === selectedId) || null,
-    [movies, selectedId]
-  );
 
   const weeklyReleaseMovies = useMemo(
     () => movies.filter(movie => movie.isWeeklyRelease),
@@ -60,6 +53,7 @@ const HomePage: React.FC = () => {
         m.title.toLowerCase().includes(q) ||
         m.genres?.some(g => g.toLowerCase().includes(q)) ||
         m.platforms?.some(p => p.toLowerCase().includes(q)) ||
+        m.language?.toLowerCase().includes(q) ||
         m.moods?.some(md => (moods.find(x => x.id === md)?.label || md).toLowerCase().includes(q)) ||
         m.description.toLowerCase().includes(q)
       );
@@ -82,7 +76,6 @@ const HomePage: React.FC = () => {
   };
   const moodLabel = mood ? moods.find(m => m.id === mood)?.label || mood : null;
   const activeResultCount = mood ? selectedMoodMovies.length : searchMovies.length;
-  const selectMovie = useCallback((movie: Movie) => setSelectedId(movie.id), []);
   const handleMoodSelect = useCallback((nextMood: string | null) => {
     setMood(nextMood);
     if (nextMood) {
@@ -179,12 +172,12 @@ const HomePage: React.FC = () => {
             title="Matched From Your Studio Catalog"
             subtitle={`Live results for "${query}" from the same admin-managed movie store.`}
           />
-          <CardRow movies={searchMovies} onSelect={selectMovie} emptyText="No movies match your search yet. Add or edit titles in Studio." />
+          <CardRow movies={searchMovies} emptyText="No movies found" />
         </section>
       )}
 
       {toggles.weeklyReleases && (
-        <WeeklyReleases movies={weeklyReleaseMovies} onSelect={selectMovie} />
+        <WeeklyReleases movies={weeklyReleaseMovies} />
       )}
       {toggles.moodDiscovery && (
         <>
@@ -198,7 +191,6 @@ const HomePage: React.FC = () => {
               />
               <CardRow
                 movies={selectedMoodMovies}
-                onSelect={selectMovie}
                 emptyText={`No ${moodLabel} titles yet. Add or edit moods from Studio.`}
               />
             </section>
@@ -206,20 +198,18 @@ const HomePage: React.FC = () => {
         </>
       )}
       {toggles.trending && (
-        <Trending movies={trendingMovies} onSelect={selectMovie} />
+        <Trending movies={trendingMovies} />
       )}
       {toggles.teluguPicks && (
-        <TeluguPicks movies={teluguPickMovies} onSelect={selectMovie} />
+        <TeluguPicks movies={teluguPickMovies} />
       )}
 
       <Footer />
 
-      <MovieModal movie={selected} onClose={() => setSelectedId(null)} />
       <MoodCollectionModal
         mood={selectedMood}
         movies={selectedMoodMovies}
         onClose={() => setMood(null)}
-        onSelectMovie={selectMovie}
       />
     </div>
   );

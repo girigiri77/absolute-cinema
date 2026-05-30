@@ -37,7 +37,7 @@ const MoodDiscovery: React.FC<Props> = ({ movies, moods, selected, onSelect }) =
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
         variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.04 } } }}
-        className="grid grid-cols-2 gap-2.5 xs:gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+        className="grid grid-cols-2 gap-2.5 xs:gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6"
       >
         {visibleMoods.map(m => {
           const active = selected === m.id;
@@ -49,7 +49,7 @@ const MoodDiscovery: React.FC<Props> = ({ movies, moods, selected, onSelect }) =
               whileHover={{ y: -4 }}
               onClick={() => onSelect(active ? null : m.id)}
               className={
-                "group relative overflow-hidden rounded-2xl border p-3 sm:p-4 text-left transition min-h-[130px] xs:min-h-[150px] " +
+                "group relative overflow-hidden rounded-2xl border p-3 sm:p-4 text-left transition min-h-[130px] xs:min-h-[150px] min-w-[140px] " +
                 (active
                   ? "border-fuchsia-400/60 bg-white/5 shadow-[0_20px_50px_-10px_rgba(168,85,247,0.7)]"
                   : "border-white/10 bg-white/[0.03] hover:border-white/20")

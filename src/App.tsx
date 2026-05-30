@@ -6,6 +6,8 @@ import { AuthProvider } from "./context/AuthContext";
 import HomePage from "./pages/HomePage";
 import StudioPage from "./pages/StudioPage";
 import LoginPage from "./pages/LoginPage";
+import MovieDetail from "./pages/MovieDetail";
+import Sitemap from "./pages/Sitemap";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const PageWrap: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -27,6 +29,8 @@ const App: React.FC = () => {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageWrap><HomePage /></PageWrap>} />
+            <Route path="/movie/:slug" element={<MovieDetail />} />
+            <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/login" element={<PageWrap><LoginPage /></PageWrap>} />
             <Route path="/studio" element={
               <ProtectedRoute>

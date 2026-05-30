@@ -27,8 +27,9 @@ const supabase = createClient(
 );
 
 const PLATFORM_ALIASES: Record<string, string> = {
-  "Disney+ Hotstar": "Hotstar",
-  JioHotstar: "Hotstar",
+  "Disney+ Hotstar": "JioHotstar",
+  "Disney Hotstar": "JioHotstar",
+  Hotstar: "JioHotstar",
   ZEE5: "Zee5",
   "Apple TV+": "JioCinema",
 };

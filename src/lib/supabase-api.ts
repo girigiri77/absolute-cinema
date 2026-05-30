@@ -31,10 +31,23 @@ export const moviesApi = {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) throw error;
     if (!data) return null;
-    
+
+    return this.transformFromDb(data);
+  },
+
+  async getBySlug(slug: string): Promise<Movie | null> {
+    const { data, error } = await supabase
+      .from('movies')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) throw error;
+    if (!data) return null;
+
     return this.transformFromDb(data);
   },
 
@@ -115,6 +128,7 @@ export const moviesApi = {
     return {
       id: data.id,
       title: data.title,
+      slug: data.slug,
       description: data.description,
       rating: data.rating,
       year: data.year,
@@ -140,6 +154,7 @@ export const moviesApi = {
   transformToDb(movie: Omit<Movie, 'id' | 'createdAt'>): any {
     const dbMovie = {
       title: movie.title,
+      slug: movie.slug,
       description: movie.description,
       rating: movie.rating,
       year: movie.year,

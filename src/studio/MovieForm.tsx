@@ -5,6 +5,7 @@ import type { Movie } from "../types";
 import { GENRES, PLATFORMS } from "../types";
 import { useMovies } from "../context/MoviesContext";
 import ImageUpload from "./ImageUpload";
+import { formatRuntime, formatReleaseDate } from "../utils/runtime";
 
 type Props = {
   initial?: Movie | null;
@@ -154,21 +155,33 @@ const MovieForm: React.FC<Props> = ({ initial, onCancel, onSubmit }) => {
               className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
             />
           </Field>
-          <Field label="Runtime (min)">
-            <input
-              type="number" min={1}
-              value={data.runtime}
-              onChange={e => setData(d => ({ ...d, runtime: Number(e.target.value) }))}
-              className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
-            />
+          <Field label="Runtime">
+            <div>
+              <input
+                type="number" min={1}
+                value={data.runtime}
+                onChange={e => setData(d => ({ ...d, runtime: Number(e.target.value) }))}
+                className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+              />
+              <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/45">
+                <span>Enter total runtime in minutes. Example: 150 = 2h 30m</span>
+                <span className="font-semibold text-fuchsia-300">Preview: {formatRuntime(data.runtime)}</span>
+              </div>
+            </div>
           </Field>
           <Field label="Release Date">
-            <input
-              type="date"
-              value={data.releaseDate || ""}
-              onChange={e => setData(d => ({ ...d, releaseDate: e.target.value }))}
-              className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
-            />
+            <div>
+              <input
+                type="date"
+                value={data.releaseDate || ""}
+                onChange={e => setData(d => ({ ...d, releaseDate: e.target.value }))}
+                className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+              />
+              <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/45">
+                <span>Date will be stored as YYYY-MM-DD</span>
+                <span className="font-semibold text-fuchsia-300">Preview: {data.releaseDate ? formatReleaseDate(data.releaseDate) : "No date selected"}</span>
+              </div>
+            </div>
           </Field>
           <Field label="Language">
             <input

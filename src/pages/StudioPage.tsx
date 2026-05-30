@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { useMovies } from "../context/MoviesContext";
+import { formatReleaseDate } from "../utils/runtime";
 import { useAuth } from "../context/AuthContext";
 import MovieForm from "../studio/MovieForm";
 import ImageUpload from "../studio/ImageUpload";
@@ -252,7 +253,7 @@ const ControlRoom: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-4">
           <StatCard icon={<Film className="h-5 w-5" />} label="Total Titles" value={stats.total} color="from-fuchsia-500 to-purple-600" />
           <StatCard icon={<Flame className="h-5 w-5" />} label="Trending" value={stats.trending} color="from-orange-500 to-red-600" />
           <StatCard icon={<Sparkles className="h-5 w-5" />} label="Weekly Releases" value={stats.weekly} color="from-blue-500 to-cyan-500" />
@@ -264,7 +265,7 @@ const ControlRoom: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             <Layers className="h-4 w-4 text-fuchsia-300" />
             <h3 className="text-sm font-semibold uppercase tracking-wider text-white/85">Homepage Sections</h3>
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
             {[
               { key: "weeklyReleases" as const, label: "Weekly Releases" },
               { key: "moodDiscovery" as const, label: "Mood Discovery" },
@@ -740,7 +741,7 @@ const CatalogTable: React.FC<{ movies: Movie[]; moodsCatalog: MoodCategory[]; on
             <div className="min-w-0">
               <div className="line-clamp-1 text-sm font-semibold text-white">{m.title}</div>
               <div className="mt-0.5 line-clamp-1 text-[11px] text-white/45">
-                {m.type} - {m.genres.slice(0, 3).join(", ")} {m.releaseDate ? `- ${m.releaseDate}` : ""}
+                {m.type} - {m.genres.slice(0, 3).join(", ")} {m.releaseDate ? `- ${formatReleaseDate(m.releaseDate)}` : ""}
               </div>
               <div className="mt-2 flex flex-wrap gap-1 md:hidden">
                 <MoodPills moods={m.moods} moodsCatalog={moodsCatalog} />

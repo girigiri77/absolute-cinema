@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState, useCall
 import type { MoodCategory, Movie, SectionToggles } from "../types";
 import { moviesApi, moodsApi, sectionTogglesApi, subscribeToMovies, subscribeToMoods, subscribeToSectionToggles } from "../lib/supabase-api";
 import { deleteImage, isSupabaseStorageUrl, extractBucketFromUrl, verifyStorageBuckets } from "../utils/storage";
+import { generateMovieSlug } from "../utils/slug";
 
 type MovieDraft = Omit<Movie, "id" | "createdAt">;
 type MoodDraft = Omit<MoodCategory, "id" | "createdAt" | "updatedAt"> & { id?: string };
@@ -15,6 +16,7 @@ type Ctx = {
   addMovie: (m: MovieDraft) => Promise<void>;
   updateMovie: (id: string, patch: Partial<Movie>) => Promise<void>;
   deleteMovie: (id: string) => Promise<void>;
+  getMovieBySlug: (slug: string) => Movie | null;
   addMood: (m: MoodDraft) => Promise<void>;
   updateMood: (id: string, patch: Partial<MoodCategory>) => Promise<void>;
   deleteMood: (id: string) => Promise<void>;
@@ -27,14 +29,16 @@ type Ctx = {
 const MoviesContext = createContext<Ctx | null>(null);
 
 const PLATFORM_ALIASES: Record<string, string> = {
-  "Disney+ Hotstar": "Hotstar",
-  JioHotstar: "Hotstar",
+  "Disney+ Hotstar": "JioHotstar",
+  "Disney Hotstar": "JioHotstar",
+  Hotstar: "JioHotstar",
   ZEE5: "Zee5",
   "Apple TV+": "JioCinema",
 };
 
 const normalizeMovie = (movie: Movie): Movie => ({
   ...movie,
+  slug: movie.slug || generateMovieSlug(movie.title, movie.year),
   releaseDate: movie.releaseDate || `${movie.year || new Date().getFullYear()}-01-01`,
   platforms: Array.from(new Set((movie.platforms || []).map(p => PLATFORM_ALIASES[p] || p))),
   genres: movie.genres || [],
@@ -135,7 +139,11 @@ export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       console.log('addMovie - Attempting to add movie:', m.title);
       console.log('addMovie - Movie data:', m);
-      const newMovie = await moviesApi.create(m);
+      const movieWithSlug = {
+        ...m,
+        slug: m.slug || generateMovieSlug(m.title, m.year),
+      };
+      const newMovie = await moviesApi.create(movieWithSlug);
       console.log('addMovie - Successfully added movie:', newMovie);
       setMovies(prev => [normalizeMovie(newMovie), ...prev]);
     } catch (err) {
@@ -332,9 +340,13 @@ export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     await fetchData();
   }, [fetchData]);
 
+  const getMovieBySlug = useCallback((slug: string) => {
+    return movies.find(m => m.slug === slug) || null;
+  }, [movies]);
+
   const value = useMemo(
-    () => ({ movies, moods, toggles, loading, error, addMovie, updateMovie, deleteMovie, addMood, updateMood, deleteMood, reorderMoods, setToggles, resetData, refresh }),
-    [movies, moods, toggles, loading, error, addMovie, updateMovie, deleteMovie, addMood, updateMood, deleteMood, reorderMoods, setToggles, resetData, refresh]
+    () => ({ movies, moods, toggles, loading, error, addMovie, updateMovie, deleteMovie, getMovieBySlug, addMood, updateMood, deleteMood, reorderMoods, setToggles, resetData, refresh }),
+    [movies, moods, toggles, loading, error, addMovie, updateMovie, deleteMovie, getMovieBySlug, addMood, updateMood, deleteMood, reorderMoods, setToggles, resetData, refresh]
   );
 
   return <MoviesContext.Provider value={value}>{children}</MoviesContext.Provider>;

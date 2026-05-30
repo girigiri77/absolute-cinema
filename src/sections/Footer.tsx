@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="mx-auto max-w-7xl px-3 sm:px-4 py-12 sm:py-16">
-        <div className="grid gap-8 sm:gap-10 md:grid-cols-4">
+        <div className="grid gap-8 sm:gap-10 md:grid-cols-4 lg:grid-cols-4">
           <div className="md:col-span-2">
             <Logo />
             <p className="mt-4 max-w-md text-sm text-white/55">

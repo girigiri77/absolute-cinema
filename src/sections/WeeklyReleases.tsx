@@ -6,7 +6,6 @@ import type { Movie } from "../types";
 
 type Props = {
   movies: Movie[];
-  onSelect: (m: Movie) => void;
 };
 
 const TABS = [
@@ -19,7 +18,7 @@ const TABS = [
 
 type TabId = typeof TABS[number]["id"];
 
-const WeeklyReleases: React.FC<Props> = ({ movies, onSelect }) => {
+const WeeklyReleases: React.FC<Props> = ({ movies }) => {
   const [tab, setTab] = useState<TabId>("all");
 
   const weekly = useMemo(() => movies.filter(m => m.isWeeklyRelease), [movies]);
@@ -36,7 +35,7 @@ const WeeklyReleases: React.FC<Props> = ({ movies, onSelect }) => {
   }, [tab, weekly]);
 
   return (
-    <section id="releases" className="relative mx-auto max-w-7xl px-3 sm:px-4 py-16 sm:py-20">
+    <section id="releases" className="relative mx-auto max-w-[90rem] px-3 sm:px-4 py-16 sm:py-20">
       <SectionHeader
         eyebrow="This Week"
         title="OTT Releases You Can't Miss"
@@ -48,7 +47,7 @@ const WeeklyReleases: React.FC<Props> = ({ movies, onSelect }) => {
                 key={t.id}
                 onClick={() => setTab(t.id)}
                 className={
-                  "relative shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition " +
+                  "relative shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition min-h-[36px] " +
                   (tab === t.id
                     ? "text-white"
                     : "text-white/55 hover:text-white")
@@ -67,7 +66,7 @@ const WeeklyReleases: React.FC<Props> = ({ movies, onSelect }) => {
           </div>
         }
       />
-      <CardRow movies={filtered} onSelect={onSelect} showNew size="md" emptyText="No new releases in this category. Try another tab." />
+      <CardRow movies={filtered} showNew size="xl" gap="lg" emptyText="No new releases in this category. Try another tab." />
     </section>
   );
 };

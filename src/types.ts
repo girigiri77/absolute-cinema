@@ -1,6 +1,7 @@
 export type Movie = {
   id: string;
   title: string;
+  slug: string;
   description: string;
   rating: number; // 0-10
   year: number;
@@ -49,7 +50,7 @@ export type SectionToggles = {
 export const PLATFORMS = [
   "Netflix",
   "Prime Video",
-  "Hotstar",
+  "JioHotstar",
   "SonyLIV",
   "Aha",
   "Zee5",

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Sparkles, Film, ChevronDown } from "lucide-react";
 import Particles from "../components/effects/Particles";
 import LightStreaks from "../components/effects/LightStreaks";
+import CinemaElements from "../components/effects/CinemaElements";
 
 type Props = {
   onExploreMoods: () => void;
@@ -69,6 +70,7 @@ const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms, onScrollToConten
       {/* Light streaks & particles */}
       <LightStreaks className="z-[1]" />
       <Particles count={50} className="z-[1]" />
+      <CinemaElements />
 
       {/* Content */}
       <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 pb-12 pt-32 text-center">
@@ -78,6 +80,21 @@ const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms, onScrollToConten
           transition={{ duration: 1, delay: 0.2 }}
           className="max-w-5xl"
         >
+          {/* Premium Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mb-6 inline-flex"
+          >
+            <div className="relative rounded-full bg-gradient-to-r from-fuchsia-500 via-purple-600 to-fuchsia-500 px-4 py-1.5 shadow-[0_0_20px_rgba(168,85,247,0.5)]">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-fuchsia-500 via-purple-600 to-fuchsia-500 blur-md opacity-50" />
+              <span className="relative text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-white">
+                #1 OTT DISCOVERY WEBSITE
+              </span>
+            </div>
+          </motion.div>
+
           <h1 className="font-display text-hero-primary tracking-[0.14em] text-white xs:tracking-[0.18em]">
             <span className="block">ABSOLUTE</span>
             <span className="block text-gradient-cinema neon-glow">CINEMA</span>
@@ -140,7 +157,7 @@ const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms, onScrollToConten
                   transition={{ duration: 0.5 }}
                   className="relative text-sm uppercase tracking-[0.2em] text-white font-medium group-hover:text-white transition-colors duration-500"
                 >
-                  Scroll down to see new updates
+                  Scroll down to see new OTT releases
                 </motion.span>
               </div>
             </motion.button>
@@ -149,14 +166,14 @@ const Hero: React.FC<Props> = ({ onExploreMoods, onBrowseFilms, onScrollToConten
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-10">
             <button
               onClick={onExploreMoods}
-              className="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 via-purple-600 to-blue-600 px-6 py-3 text-sm font-bold text-white shadow-[0_20px_50px_-10px_rgba(168,85,247,0.6)] transition hover:scale-[1.03] glow-pulse"
+              className="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 via-purple-600 to-blue-600 px-5 py-3 text-sm font-bold text-white shadow-[0_20px_50px_-10px_rgba(168,85,247,0.6)] transition hover:scale-[1.03] glow-pulse min-h-[44px]"
             >
               <Sparkles className="h-4 w-4" />
               Explore Moods
             </button>
             <button
               onClick={onBrowseFilms}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm font-bold text-white/90 backdrop-blur transition hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white/90 backdrop-blur transition hover:bg-white/10 min-h-[44px]"
             >
               <Film className="h-4 w-4" />
               Browse Films

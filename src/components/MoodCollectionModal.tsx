@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Filter, Play, Star, X } from "lucide-react";
 import type { MoodCategory, Movie } from "../types";
@@ -7,10 +8,9 @@ type Props = {
   mood: MoodCategory | null;
   movies: Movie[];
   onClose: () => void;
-  onSelectMovie: (movie: Movie) => void;
 };
 
-const MoodCollectionModal: React.FC<Props> = ({ mood, movies, onClose, onSelectMovie }) => {
+const MoodCollectionModal: React.FC<Props> = ({ mood, movies, onClose }) => {
   const [platform, setPlatform] = useState("all");
   const platforms = useMemo(() => Array.from(new Set(movies.flatMap(movie => movie.platforms || []))), [movies]);
   const filtered = useMemo(
@@ -80,7 +80,7 @@ const MoodCollectionModal: React.FC<Props> = ({ mood, movies, onClose, onSelectM
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {filtered.map(movie => (
-                    <button key={movie.id} onClick={() => onSelectMovie(movie)} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] text-left transition hover:-translate-y-1 hover:border-fuchsia-400/35 hover:shadow-[0_26px_70px_-30px_rgba(217,70,239,0.7)]">
+                    <Link key={movie.id} to={`/movie/${movie.slug}`} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] text-left transition hover:-translate-y-1 hover:border-fuchsia-400/35 hover:shadow-[0_26px_70px_-30px_rgba(217,70,239,0.7)]">
                       <div className="relative aspect-video overflow-hidden">
                         <img src={movie.backdrop || movie.poster} alt={movie.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
@@ -92,7 +92,7 @@ const MoodCollectionModal: React.FC<Props> = ({ mood, movies, onClose, onSelectM
                         <div className="line-clamp-1 text-sm font-bold text-white">{movie.title}</div>
                         <div className="mt-1 text-xs text-white/50">{movie.year} • {movie.platforms.slice(0, 2).join(" / ")}</div>
                       </div>
-                    </button>
+                    </Link>
                   ))}
                 </div>
               )}
