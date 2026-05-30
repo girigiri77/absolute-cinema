@@ -6,6 +6,7 @@ import { Star, Clock, Calendar, Play, Plus, Share2, ArrowLeft } from "lucide-rea
 import type { Movie } from "../types";
 import { moviesApi } from "../lib/supabase-api";
 import { formatRuntime, formatReleaseDate } from "../utils/runtime";
+import PlatformCard from "../components/PlatformCard";
 
 const toEmbed = (url: string) => {
   if (!url) return "";
@@ -244,14 +245,9 @@ const MovieDetail: React.FC = () => {
                     Streaming on
                   </div>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-3 flex flex-wrap gap-2 md:gap-3">
                     {movie.platforms.map((p) => (
-                      <span
-                        key={p}
-                        className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white"
-                      >
-                        {p}
-                      </span>
+                      <PlatformCard key={p} platform={p} />
                     ))}
                   </div>
                 </div>

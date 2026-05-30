@@ -58,6 +58,31 @@ export const PLATFORMS = [
   "SunNXT",
 ];
 
+export const PLATFORM_LOGOS: Record<string, string> = {
+  Netflix: "/platforms/netflix.png",
+  "Prime Video": "/platforms/prime-video.png",
+  JioHotstar: "/platforms/jiohotstar.png",
+  Hotstar: "/platforms/jiohotstar.png",
+  "Disney+ Hotstar": "/platforms/jiohotstar.png",
+  SonyLIV: "/platforms/sonyliv.png",
+  Zee5: "/platforms/zee5.png",
+  ZEE5: "/platforms/zee5.png",
+  Aha: "/platforms/aha.png",
+  JioCinema: "/platforms/jiocinema.png",
+  SunNXT: "/platforms/sunnxt.png",
+};
+
+export const PLATFORM_COLORS: Record<string, { bg: string; text: string }> = {
+  Netflix: { bg: "#E50914", text: "#FFFFFF" },
+  "Prime Video": { bg: "#00A8E1", text: "#FFFFFF" },
+  JioHotstar: { bg: "#0F2D52", text: "#FFFFFF" },
+  SonyLIV: { bg: "#0066FF", text: "#FFFFFF" },
+  Zee5: { bg: "#FF0095", text: "#FFFFFF" },
+  Aha: { bg: "#FF4D00", text: "#FFFFFF" },
+  JioCinema: { bg: "#00BFFF", text: "#FFFFFF" },
+  SunNXT: { bg: "#FF6600", text: "#FFFFFF" },
+};
+
 export const GENRES = [
   "Action", "Drama", "Romance", "Thriller", "Sci-Fi", "Comedy",
   "Horror", "Mystery", "Crime", "Fantasy", "Adventure", "Biography",

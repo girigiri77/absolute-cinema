@@ -5,6 +5,7 @@ import { X, Star, Clock, Calendar, Play, Plus, Share2 } from "lucide-react";
 import type { Movie } from "../types";
 import { useMovies } from "../context/MoviesContext";
 import { formatRuntime, formatReleaseDate } from "../utils/runtime";
+import PlatformCard from "./PlatformCard";
 
 type Props = {
   movie: Movie | null;
@@ -242,14 +243,9 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
                         Streaming on
                       </div>
 
-                      <div className="mt-2 flex flex-wrap gap-2">
+                      <div className="mt-2 flex flex-wrap gap-2 md:gap-3">
                         {movie.platforms.map((p) => (
-                          <span
-                            key={p}
-                            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white"
-                          >
-                            {p}
-                          </span>
+                          <PlatformCard key={p} platform={p} />
                         ))}
                       </div>
                     </div>
