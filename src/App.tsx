@@ -8,6 +8,8 @@ import StudioPage from "./pages/StudioPage";
 import LoginPage from "./pages/LoginPage";
 import MovieDetail from "./pages/MovieDetail";
 import Sitemap from "./pages/Sitemap";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const PageWrap: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -29,7 +31,9 @@ const App: React.FC = () => {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageWrap><HomePage /></PageWrap>} />
-            <Route path="/movie/:slug" element={<MovieDetail />} />
+            <Route path="/about" element={<PageWrap><AboutPage /></PageWrap>} />
+            <Route path="/contact" element={<PageWrap><ContactPage /></PageWrap>} />
+            <Route path="/movie/:slug" element={<PageWrap><MovieDetail /></PageWrap>} />
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/login" element={<PageWrap><LoginPage /></PageWrap>} />
             <Route path="/studio" element={

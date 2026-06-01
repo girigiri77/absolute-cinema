@@ -83,8 +83,8 @@ const Footer: React.FC = () => {
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">Company</div>
             <ul className="mt-3 space-y-2 text-sm text-white/70">
-              <li><a className="hover:text-white" href="#">About</a></li>
-              <li><a className="hover:text-white" href="#">Contact</a></li>
+              <li><Link className="hover:text-white" to="/about">About</Link></li>
+              <li><Link className="hover:text-white" to="/contact">Contact</Link></li>
               <li><a className="hover:text-white" href="#">Press</a></li>
               <li>
                 <Link className="text-fuchsia-300 hover:text-fuchsia-200" to="/studio">Studio</Link>
