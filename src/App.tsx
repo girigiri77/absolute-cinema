@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { MoviesProvider } from "./context/MoviesContext";
@@ -11,6 +11,7 @@ import Sitemap from "./pages/Sitemap";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { initializeOneSignal } from "./lib/onesignal";
 
 const PageWrap: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <motion.div
@@ -25,6 +26,11 @@ const PageWrap: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 
 const App: React.FC = () => {
   const location = useLocation();
+
+  useEffect(() => {
+    initializeOneSignal();
+  }, []);
+
   return (
     <AuthProvider>
       <MoviesProvider>

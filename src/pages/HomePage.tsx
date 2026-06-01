@@ -11,6 +11,7 @@ import Footer from "../sections/Footer";
 import MoodCollectionModal from "../components/MoodCollectionModal";
 import CardRow from "../components/CardRow";
 import SectionHeader from "../components/SectionHeader";
+import NotificationButton from "../components/NotificationButton";
 import { getMoviesForMood } from "../utils/moodCollections";
 
 const HomePage: React.FC = () => {
@@ -211,6 +212,8 @@ const HomePage: React.FC = () => {
         movies={selectedMoodMovies}
         onClose={() => setMood(null)}
       />
+
+      <NotificationButton />
     </div>
   );
 };
