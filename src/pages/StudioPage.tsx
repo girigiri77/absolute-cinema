@@ -748,7 +748,7 @@ const CatalogTable: React.FC<{ movies: Movie[]; moodsCatalog: MoodCategory[]; on
                 {m.platforms.slice(0, 3).map(p => <MiniPill key={p}>{p}</MiniPill>)}
               </div>
             </div>
-            <div className="hidden text-xs text-white/70 md:block">{m.type === "Movie" ? (m.runtime ? formatMovieRuntime(m.runtime) : m.year) : formatSeriesInfo(m.currentSeason, m.currentEpisode, m.episodeRuntime)}</div>
+            <div className="hidden text-xs text-white/70 md:block">{m.type === "Movie" ? (m.runtime ? formatMovieRuntime(m.runtime) : m.year) : formatSeriesInfo(m.currentSeason, m.currentSeasonEpisodeCount, m.episodeRuntime)}</div>
             <div className="hidden items-center gap-1 text-xs text-amber-200 md:flex">
               <Star className="h-3 w-3 fill-amber-300 stroke-amber-300" /> {m.rating.toFixed(1)}
             </div>

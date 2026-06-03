@@ -279,3 +279,7 @@ ADD COLUMN IF NOT EXISTS watch_url TEXT;
 ALTER TABLE movies
 ADD COLUMN IF NOT EXISTS current_season INTEGER,
 ADD COLUMN IF NOT EXISTS current_episode INTEGER;
+
+-- Add current season episode count column
+ALTER TABLE movies
+ADD COLUMN IF NOT EXISTS current_season_episode_count INTEGER;

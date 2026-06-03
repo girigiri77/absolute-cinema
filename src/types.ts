@@ -7,9 +7,9 @@ export type Movie = {
   year: number;
   releaseDate?: string; // YYYY-MM-DD
   runtime?: number; // minutes (for movies)
-  currentSeason?: number; // for series (current season number)
-  currentEpisode?: number; // for series (current episode number)
-  episodeRuntime?: number; // minutes (for series)
+  currentSeason?: number; // for series (latest season released)
+  currentSeasonEpisodeCount?: number; // for series (number of episodes in current season)
+  episodeRuntime?: number; // minutes (for series, average episode runtime)
   seriesStatus?: 'Ongoing' | 'Completed'; // for series
   firstAirDate?: string; // YYYY-MM-DD (for series)
   lastAirDate?: string; // YYYY-MM-DD (for series, optional)

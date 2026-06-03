@@ -12,15 +12,15 @@ export function formatMovieRuntime(runtime?: number): string {
   return formatRuntime(runtime);
 }
 
-export function formatSeriesInfo(currentSeason?: number, currentEpisode?: number, episodeRuntime?: number): string {
+export function formatSeriesInfo(currentSeason?: number, currentSeasonEpisodeCount?: number, episodeRuntime?: number): string {
   const parts: string[] = [];
   
   if (currentSeason) {
     parts.push(`Season ${currentSeason}`);
   }
   
-  if (currentEpisode) {
-    parts.push(`Episode ${currentEpisode}`);
+  if (currentSeasonEpisodeCount) {
+    parts.push(`${currentSeasonEpisodeCount} Episodes`);
   }
   
   if (episodeRuntime) {

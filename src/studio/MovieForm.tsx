@@ -22,7 +22,7 @@ const empty: Omit<Movie, "id" | "createdAt"> = {
   releaseDate: new Date().toISOString().slice(0, 10),
   runtime: 120,
   currentSeason: undefined,
-  currentEpisode: undefined,
+  currentSeasonEpisodeCount: undefined,
   episodeRuntime: undefined,
   seriesStatus: undefined,
   firstAirDate: undefined,
@@ -197,22 +197,22 @@ const MovieForm: React.FC<Props> = ({ initial, onCancel, onSubmit }) => {
             </>
           ) : (
             <>
-              <Field label="Current Season">
+              <Field label="Latest Season Released">
                 <input
                   type="number" min={1}
                   value={data.currentSeason || ""}
                   onChange={e => setData(d => ({ ...d, currentSeason: e.target.value ? Number(e.target.value) : undefined }))}
                   className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
-                  placeholder="e.g. 3"
+                  placeholder="e.g. 26"
                 />
               </Field>
-              <Field label="Current Episode">
+              <Field label="Episodes In Current Season">
                 <input
                   type="number" min={1}
-                  value={data.currentEpisode || ""}
-                  onChange={e => setData(d => ({ ...d, currentEpisode: e.target.value ? Number(e.target.value) : undefined }))}
+                  value={data.currentSeasonEpisodeCount || ""}
+                  onChange={e => setData(d => ({ ...d, currentSeasonEpisodeCount: e.target.value ? Number(e.target.value) : undefined }))}
                   className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
-                  placeholder="e.g. 8"
+                  placeholder="e.g. 22"
                 />
               </Field>
               <Field label="Episode Runtime">
