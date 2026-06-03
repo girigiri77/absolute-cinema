@@ -21,8 +21,8 @@ const empty: Omit<Movie, "id" | "createdAt"> = {
   year: new Date().getFullYear(),
   releaseDate: new Date().toISOString().slice(0, 10),
   runtime: 120,
-  totalSeasons: undefined,
-  totalEpisodes: undefined,
+  currentSeason: undefined,
+  currentEpisode: undefined,
   episodeRuntime: undefined,
   seriesStatus: undefined,
   firstAirDate: undefined,
@@ -197,22 +197,22 @@ const MovieForm: React.FC<Props> = ({ initial, onCancel, onSubmit }) => {
             </>
           ) : (
             <>
-              <Field label="Total Seasons">
+              <Field label="Current Season">
                 <input
                   type="number" min={1}
-                  value={data.totalSeasons || ""}
-                  onChange={e => setData(d => ({ ...d, totalSeasons: e.target.value ? Number(e.target.value) : undefined }))}
+                  value={data.currentSeason || ""}
+                  onChange={e => setData(d => ({ ...d, currentSeason: e.target.value ? Number(e.target.value) : undefined }))}
                   className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
                   placeholder="e.g. 3"
                 />
               </Field>
-              <Field label="Total Episodes">
+              <Field label="Current Episode">
                 <input
                   type="number" min={1}
-                  value={data.totalEpisodes || ""}
-                  onChange={e => setData(d => ({ ...d, totalEpisodes: e.target.value ? Number(e.target.value) : undefined }))}
+                  value={data.currentEpisode || ""}
+                  onChange={e => setData(d => ({ ...d, currentEpisode: e.target.value ? Number(e.target.value) : undefined }))}
                   className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
-                  placeholder="e.g. 24"
+                  placeholder="e.g. 8"
                 />
               </Field>
               <Field label="Episode Runtime">

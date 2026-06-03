@@ -102,7 +102,7 @@ const MovieCard: React.FC<Props> = ({ movie, showNew, size = "md" }) => {
                   <span>{movie.year}</span>
                 )
               ) : (
-                <span>{formatSeriesInfo(movie.totalSeasons, movie.totalEpisodes, movie.episodeRuntime)}</span>
+                <span>{formatSeriesInfo(movie.currentSeason, movie.currentEpisode, movie.episodeRuntime)}</span>
               )}
             </div>
           </div>

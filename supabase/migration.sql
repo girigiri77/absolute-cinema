@@ -274,3 +274,8 @@ ALTER TABLE movies ALTER COLUMN runtime DROP NOT NULL;
 -- Add watch_url column for OTT platform direct links
 ALTER TABLE movies
 ADD COLUMN IF NOT EXISTS watch_url TEXT;
+
+-- Add current season and episode columns for series metadata
+ALTER TABLE movies
+ADD COLUMN IF NOT EXISTS current_season INTEGER,
+ADD COLUMN IF NOT EXISTS current_episode INTEGER;

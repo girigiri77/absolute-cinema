@@ -192,7 +192,7 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
                     ) : (
                       <span className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
-                        {formatSeriesInfo(movie.totalSeasons, movie.totalEpisodes, movie.episodeRuntime)}
+                        {formatSeriesInfo(movie.currentSeason, movie.currentEpisode, movie.episodeRuntime)}
                       </span>
                     )}
 
