@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Star, Clock, Calendar, Play, Plus, Share2 } from "lucide-react";
 import type { Movie } from "../types";
 import { useMovies } from "../context/MoviesContext";
-import { formatRuntime, formatReleaseDate } from "../utils/runtime";
+import { formatReleaseDate, formatMovieRuntime, formatSeriesInfo } from "../utils/runtime";
 import PlatformCard from "./PlatformCard";
 
 type Props = {
@@ -182,12 +182,19 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
                       {movie.releaseDate ? formatReleaseDate(movie.releaseDate) : movie.year}
                     </span>
 
-                    {movie.runtime ? (
+                    {movie.type === "Movie" ? (
+                      movie.runtime ? (
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          {formatMovieRuntime(movie.runtime)}
+                        </span>
+                      ) : null
+                    ) : (
                       <span className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
-                        {formatRuntime(movie.runtime)}
+                        {formatSeriesInfo(movie.totalSeasons, movie.totalEpisodes, movie.episodeRuntime)}
                       </span>
-                    ) : null}
+                    )}
 
                     <span className="rounded border border-white/15 px-1.5 py-0.5 text-xs">
                       {movie.type}
@@ -245,9 +252,23 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
 
                       <div className="mt-2 flex flex-wrap gap-2 md:gap-3">
                         {movie.platforms.map((p) => (
-                          <PlatformCard key={p} platform={p} />
+                          <PlatformCard key={p} platform={p} watchUrl={movie.watchUrl} />
                         ))}
                       </div>
+                    </div>
+                  )}
+
+                  {movie.watchUrl && (
+                    <div className="mt-4">
+                      <a
+                        href={movie.watchUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 to-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-5px_rgba(168,85,247,0.6)] transition hover:scale-[1.03]"
+                      >
+                        <Play className="h-4 w-4 fill-white" />
+                        Watch Now
+                      </a>
                     </div>
                   )}
 

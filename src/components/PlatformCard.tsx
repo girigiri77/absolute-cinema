@@ -4,6 +4,7 @@ import { PLATFORM_LOGOS, PLATFORM_COLORS } from "../types";
 
 type Props = {
   platform: string;
+  watchUrl?: string;
 };
 
 const LOGO_SIZES: Record<string, string> = {
@@ -17,18 +18,19 @@ const LOGO_SIZES: Record<string, string> = {
   JioCinema: "max-w-[95%] max-h-[75px]",
 };
 
-const PlatformCard: React.FC<Props> = ({ platform }) => {
+const PlatformCard: React.FC<Props> = ({ platform, watchUrl }) => {
   const [imageError, setImageError] = useState(false);
   const logoUrl = PLATFORM_LOGOS[platform];
   const platformColor = PLATFORM_COLORS[platform] || { bg: "#333333", text: "#FFFFFF" };
+  const isClickable = !!watchUrl;
 
-  return (
+  const cardContent = (
     <motion.div
-      className="group relative w-[150px] h-[90px] md:w-[180px] md:h-[100px] rounded-2xl border border-white/8 bg-white/[0.03] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-all duration-300 hover:scale-[1.04] hover:border-fuchsia-400/30 hover:shadow-[0_12px_40px_-8px_rgba(168,85,247,0.4)] cursor-pointer"
-      whileHover={{ y: -2 }}
+      className={`group relative w-[150px] h-[90px] md:w-[180px] md:h-[100px] rounded-2xl border border-white/8 bg-white/[0.03] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.4)] backdrop-blur-sm transition-all duration-300 ${isClickable ? 'hover:scale-[1.04] hover:border-fuchsia-400/30 hover:shadow-[0_12px_40px_-8px_rgba(168,85,247,0.4)] cursor-pointer' : ''}`}
+      whileHover={isClickable ? { y: -2 } : undefined}
     >
       {/* Glow effect on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/0 via-fuchsia-400/8 to-purple-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className={`absolute inset-0 bg-gradient-to-br from-fuchsia-500/0 via-fuchsia-400/8 to-purple-500/0 opacity-0 transition-opacity duration-300 ${isClickable ? 'group-hover:opacity-100' : ''}`} />
 
       {/* Logo */}
       {logoUrl && !imageError ? (
@@ -57,6 +59,20 @@ const PlatformCard: React.FC<Props> = ({ platform }) => {
       )}
     </motion.div>
   );
+
+  if (isClickable) {
+    return (
+      <a
+        href={watchUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {cardContent}
+      </a>
+    );
+  }
+
+  return cardContent;
 };
 
 export default PlatformCard;

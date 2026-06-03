@@ -15,15 +15,23 @@ type Props = {
 
 const empty: Omit<Movie, "id" | "createdAt"> = {
   title: "",
+  slug: "",
   description: "",
   rating: 7.5,
   year: new Date().getFullYear(),
   releaseDate: new Date().toISOString().slice(0, 10),
   runtime: 120,
+  totalSeasons: undefined,
+  totalEpisodes: undefined,
+  episodeRuntime: undefined,
+  seriesStatus: undefined,
+  firstAirDate: undefined,
+  lastAirDate: undefined,
   genres: [],
   moods: [],
   platforms: [],
   trailerUrl: "",
+  watchUrl: undefined,
   poster: "",
   backdrop: "",
   type: "Movie",
@@ -155,34 +163,94 @@ const MovieForm: React.FC<Props> = ({ initial, onCancel, onSubmit }) => {
               className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
             />
           </Field>
-          <Field label="Runtime">
-            <div>
-              <input
-                type="number" min={1}
-                value={data.runtime}
-                onChange={e => setData(d => ({ ...d, runtime: Number(e.target.value) }))}
-                className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
-              />
-              <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/45">
-                <span>Enter total runtime in minutes. Example: 150 = 2h 30m</span>
-                <span className="font-semibold text-fuchsia-300">Preview: {formatRuntime(data.runtime)}</span>
-              </div>
-            </div>
-          </Field>
-          <Field label="Release Date">
-            <div>
-              <input
-                type="date"
-                value={data.releaseDate || ""}
-                onChange={e => setData(d => ({ ...d, releaseDate: e.target.value }))}
-                className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
-              />
-              <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/45">
-                <span>Date will be stored as YYYY-MM-DD</span>
-                <span className="font-semibold text-fuchsia-300">Preview: {data.releaseDate ? formatReleaseDate(data.releaseDate) : "No date selected"}</span>
-              </div>
-            </div>
-          </Field>
+          
+          {data.type === "Movie" ? (
+            <>
+              <Field label="Runtime">
+                <div>
+                  <input
+                    type="number" min={1}
+                    value={data.runtime || ""}
+                    onChange={e => setData(d => ({ ...d, runtime: e.target.value ? Number(e.target.value) : undefined }))}
+                    className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+                  />
+                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/45">
+                    <span>Enter total runtime in minutes. Example: 150 = 2h 30m</span>
+                    <span className="font-semibold text-fuchsia-300">Preview: {data.runtime ? formatRuntime(data.runtime) : "No runtime"}</span>
+                  </div>
+                </div>
+              </Field>
+              <Field label="Release Date">
+                <div>
+                  <input
+                    type="date"
+                    value={data.releaseDate || ""}
+                    onChange={e => setData(d => ({ ...d, releaseDate: e.target.value }))}
+                    className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+                  />
+                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/45">
+                    <span>Date will be stored as YYYY-MM-DD</span>
+                    <span className="font-semibold text-fuchsia-300">Preview: {data.releaseDate ? formatReleaseDate(data.releaseDate) : "No date selected"}</span>
+                  </div>
+                </div>
+              </Field>
+            </>
+          ) : (
+            <>
+              <Field label="Total Seasons">
+                <input
+                  type="number" min={1}
+                  value={data.totalSeasons || ""}
+                  onChange={e => setData(d => ({ ...d, totalSeasons: e.target.value ? Number(e.target.value) : undefined }))}
+                  className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+                  placeholder="e.g. 3"
+                />
+              </Field>
+              <Field label="Total Episodes">
+                <input
+                  type="number" min={1}
+                  value={data.totalEpisodes || ""}
+                  onChange={e => setData(d => ({ ...d, totalEpisodes: e.target.value ? Number(e.target.value) : undefined }))}
+                  className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+                  placeholder="e.g. 24"
+                />
+              </Field>
+              <Field label="Episode Runtime">
+                <div>
+                  <input
+                    type="number" min={1}
+                    value={data.episodeRuntime || ""}
+                    onChange={e => setData(d => ({ ...d, episodeRuntime: e.target.value ? Number(e.target.value) : undefined }))}
+                    className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+                    placeholder="e.g. 45"
+                  />
+                  <div className="mt-1.5 text-[11px] text-white/45">
+                    Average episode runtime in minutes
+                  </div>
+                </div>
+              </Field>
+              <Field label="Status">
+                <select
+                  value={data.seriesStatus || ""}
+                  onChange={e => setData(d => ({ ...d, seriesStatus: e.target.value as 'Ongoing' | 'Completed' | undefined }))}
+                  className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+                >
+                  <option className="bg-[#0c0817]" value="">Select status</option>
+                  <option className="bg-[#0c0817]" value="Ongoing">Ongoing</option>
+                  <option className="bg-[#0c0817]" value="Completed">Completed</option>
+                </select>
+              </Field>
+              <Field label="First Air Date">
+                <input
+                  type="date"
+                  value={data.firstAirDate || ""}
+                  onChange={e => setData(d => ({ ...d, firstAirDate: e.target.value }))}
+                  className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+                />
+              </Field>
+            </>
+          )}
+          
           <Field label="Language">
             <input
               value={data.language || ""}
@@ -193,6 +261,20 @@ const MovieForm: React.FC<Props> = ({ initial, onCancel, onSubmit }) => {
           </Field>
         </div>
 
+        {data.type === "Series" && (
+          <Field label="Last Air Date (Optional)">
+            <input
+              type="date"
+              value={data.lastAirDate || ""}
+              onChange={e => setData(d => ({ ...d, lastAirDate: e.target.value }))}
+              className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+            />
+            <div className="mt-1.5 text-[11px] text-white/45">
+              Only for completed series
+            </div>
+          </Field>
+        )}
+
         <Field label="Trailer URL (YouTube)">
           <input
             value={data.trailerUrl}
@@ -200,6 +282,18 @@ const MovieForm: React.FC<Props> = ({ initial, onCancel, onSubmit }) => {
             className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
             placeholder="https://www.youtube.com/watch?v=…"
           />
+        </Field>
+
+        <Field label="Watch URL (OTT)">
+          <input
+            value={data.watchUrl || ""}
+            onChange={e => setData(d => ({ ...d, watchUrl: e.target.value || undefined }))}
+            className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-fuchsia-500/60"
+            placeholder="https://www.netflix.com/title/..."
+          />
+          <div className="mt-1.5 text-[11px] text-white/45">
+            Direct link to the movie/series page on the OTT platform (optional)
+          </div>
         </Field>
 
         <Field label="Genres">

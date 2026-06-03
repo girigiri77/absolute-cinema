@@ -7,6 +7,29 @@ export function formatRuntime(minutes: number): string {
   return `${mins}m`;
 }
 
+export function formatMovieRuntime(runtime?: number): string {
+  if (!runtime) return "";
+  return formatRuntime(runtime);
+}
+
+export function formatSeriesInfo(totalSeasons?: number, totalEpisodes?: number, episodeRuntime?: number): string {
+  const parts: string[] = [];
+  
+  if (totalSeasons) {
+    parts.push(`${totalSeasons} Season${totalSeasons > 1 ? 's' : ''}`);
+  }
+  
+  if (totalEpisodes) {
+    parts.push(`${totalEpisodes} Episode${totalEpisodes > 1 ? 's' : ''}`);
+  }
+  
+  if (episodeRuntime) {
+    parts.push(formatRuntime(episodeRuntime));
+  }
+  
+  return parts.join(' • ');
+}
+
 export function formatReleaseDate(dateString: string): string {
   if (!dateString) return "";
   

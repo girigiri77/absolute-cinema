@@ -258,3 +258,19 @@ CREATE POLICY "Admins can delete admin users"
       WHERE email = auth.email()
     )
   );
+
+-- Add series-specific columns to movies table
+ALTER TABLE movies
+ADD COLUMN IF NOT EXISTS total_seasons INTEGER,
+ADD COLUMN IF NOT EXISTS total_episodes INTEGER,
+ADD COLUMN IF NOT EXISTS episode_runtime INTEGER,
+ADD COLUMN IF NOT EXISTS series_status TEXT CHECK (series_status IN ('Ongoing', 'Completed')),
+ADD COLUMN IF NOT EXISTS first_air_date DATE,
+ADD COLUMN IF NOT EXISTS last_air_date DATE;
+
+-- Make runtime nullable to support both movies and series
+ALTER TABLE movies ALTER COLUMN runtime DROP NOT NULL;
+
+-- Add watch_url column for OTT platform direct links
+ALTER TABLE movies
+ADD COLUMN IF NOT EXISTS watch_url TEXT;

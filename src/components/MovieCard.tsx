@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Play, Sparkles } from "lucide-react";
 import type { Movie } from "../types";
+import { formatMovieRuntime, formatSeriesInfo } from "../utils/runtime";
 
 type Props = {
   movie: Movie;
@@ -94,9 +95,15 @@ const MovieCard: React.FC<Props> = ({ movie, showNew, size = "md" }) => {
           <div className={paddingSize}>
             <div className={"line-clamp-1 " + titleSize + " font-semibold text-white"}>{movie.title}</div>
             <div className="mt-0.5 flex items-center gap-2 text-[11px] text-white/55">
-              <span>{movie.year}</span>
-              <span className="h-1 w-1 rounded-full bg-white/30" />
-              <span className="line-clamp-1">{movie.genres.slice(0, 2).join(" • ")}</span>
+              {movie.type === "Movie" ? (
+                movie.runtime ? (
+                  <span>{formatMovieRuntime(movie.runtime)}</span>
+                ) : (
+                  <span>{movie.year}</span>
+                )
+              ) : (
+                <span>{formatSeriesInfo(movie.totalSeasons, movie.totalEpisodes, movie.episodeRuntime)}</span>
+              )}
             </div>
           </div>
         </div>

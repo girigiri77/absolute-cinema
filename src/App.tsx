@@ -12,6 +12,7 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { initializeOneSignal } from "./lib/onesignal";
+import { validateSeriesSchema } from "./utils/schemaValidation";
 
 const PageWrap: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <motion.div
@@ -29,6 +30,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     initializeOneSignal();
+    validateSeriesSchema();
   }, []);
 
   return (

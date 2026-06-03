@@ -18,7 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { useMovies } from "../context/MoviesContext";
-import { formatReleaseDate } from "../utils/runtime";
+import { formatReleaseDate, formatMovieRuntime, formatSeriesInfo } from "../utils/runtime";
 import { useAuth } from "../context/AuthContext";
 import MovieForm from "../studio/MovieForm";
 import ImageUpload from "../studio/ImageUpload";
@@ -717,10 +717,10 @@ const CatalogTable: React.FC<{ movies: Movie[]; moodsCatalog: MoodCategory[]; on
 
   return (
     <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] shadow-[0_30px_90px_-40px_rgba(168,85,247,0.5)]">
-      <div className="hidden grid-cols-[64px_minmax(220px,1.3fr)_80px_90px_minmax(160px,1fr)_minmax(170px,1fr)_130px] gap-3 border-b border-white/10 bg-white/5 px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-white/45 md:grid">
+      <div className="hidden grid-cols-[64px_minmax(220px,1.3fr)_90px_90px_minmax(160px,1fr)_minmax(170px,1fr)_130px] gap-3 border-b border-white/10 bg-white/5 px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-white/45 md:grid">
         <div>Poster</div>
         <div>Title</div>
-        <div>Year</div>
+        <div>Info</div>
         <div>Rating</div>
         <div>Moods</div>
         <div>OTT Platforms</div>
@@ -733,7 +733,7 @@ const CatalogTable: React.FC<{ movies: Movie[]; moodsCatalog: MoodCategory[]; on
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: Math.min(i * 0.02, 0.25) }}
-            className="grid grid-cols-[64px_1fr] gap-3 border-b border-white/5 px-4 py-4 transition hover:bg-white/[0.035] md:grid-cols-[64px_minmax(220px,1.3fr)_80px_90px_minmax(160px,1fr)_minmax(170px,1fr)_130px] md:items-center"
+            className="grid grid-cols-[64px_1fr] gap-3 border-b border-white/5 px-4 py-4 transition hover:bg-white/[0.035] md:grid-cols-[64px_minmax(220px,1.3fr)_90px_90px_minmax(160px,1fr)_minmax(170px,1fr)_130px] md:items-center"
           >
             <div className="overflow-hidden rounded-lg border border-white/10 shadow-[0_10px_30px_-15px_rgba(168,85,247,0.6)]">
               <img src={m.poster} alt="" className="aspect-poster h-16 w-11 object-cover" />
@@ -748,7 +748,7 @@ const CatalogTable: React.FC<{ movies: Movie[]; moodsCatalog: MoodCategory[]; on
                 {m.platforms.slice(0, 3).map(p => <MiniPill key={p}>{p}</MiniPill>)}
               </div>
             </div>
-            <div className="hidden text-xs text-white/70 md:block">{m.year}</div>
+            <div className="hidden text-xs text-white/70 md:block">{m.type === "Movie" ? (m.runtime ? formatMovieRuntime(m.runtime) : m.year) : formatSeriesInfo(m.totalSeasons, m.totalEpisodes, m.episodeRuntime)}</div>
             <div className="hidden items-center gap-1 text-xs text-amber-200 md:flex">
               <Star className="h-3 w-3 fill-amber-300 stroke-amber-300" /> {m.rating.toFixed(1)}
             </div>

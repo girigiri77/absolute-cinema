@@ -6,11 +6,18 @@ export type Movie = {
   rating: number; // 0-10
   year: number;
   releaseDate?: string; // YYYY-MM-DD
-  runtime: number; // minutes
+  runtime?: number; // minutes (for movies)
+  totalSeasons?: number; // for series
+  totalEpisodes?: number; // for series
+  episodeRuntime?: number; // minutes (for series)
+  seriesStatus?: 'Ongoing' | 'Completed'; // for series
+  firstAirDate?: string; // YYYY-MM-DD (for series)
+  lastAirDate?: string; // YYYY-MM-DD (for series, optional)
   genres: string[];
   moods: string[];
   platforms: string[]; // Netflix, Prime, etc.
   trailerUrl: string; // youtube embed url or watch url
+  watchUrl?: string; // OTT platform direct watch URL (e.g., Netflix, Prime Video)
   poster: string; // url or base64
   backdrop: string; // url or base64
   language?: string;

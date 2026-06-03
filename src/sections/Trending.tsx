@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Star, Play, Flame } from "lucide-react";
 import SectionHeader from "../components/SectionHeader";
 import type { Movie } from "../types";
+import { formatMovieRuntime, formatSeriesInfo } from "../utils/runtime";
 
 type Props = {
   movies: Movie[];
@@ -76,7 +77,7 @@ const Trending: React.FC<Props> = ({ movies }) => {
                     <div className="min-w-0">
                       <div className="line-clamp-1 text-sm sm:text-base font-bold text-white">{m.title}</div>
                       <div className="mt-0.5 line-clamp-1 text-xs text-white/55">
-                        {m.year} • {m.genres.slice(0, 2).join(" • ")}
+                        {m.type} • {m.type === "Movie" ? (m.runtime ? formatMovieRuntime(m.runtime) : "") : formatSeriesInfo(m.totalSeasons, m.totalEpisodes, m.episodeRuntime)}
                       </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-1 rounded-md bg-amber-400/15 px-1.5 sm:px-2 py-0.5 text-xs font-semibold text-amber-200">

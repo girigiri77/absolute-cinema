@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Play, Star, Quote } from "lucide-react";
 import SectionHeader from "../components/SectionHeader";
 import type { Movie } from "../types";
-import { formatRuntime } from "../utils/runtime";
+import { formatMovieRuntime, formatSeriesInfo } from "../utils/runtime";
 
 type Props = {
   movies: Movie[];
@@ -78,7 +78,7 @@ const FeaturedTeluguCard: React.FC<{ movie: Movie }> = ({ movie }) => (
           <div className="flex flex-wrap items-center gap-2 text-amber-300">
             <Star className="h-4 w-4 fill-amber-300 stroke-amber-300" />
             <span className="text-sm font-semibold">{movie.rating.toFixed(1)}</span>
-            <span className="text-xs text-white/55">• {movie.year} • {formatRuntime(movie.runtime)}</span>
+            <span className="text-xs text-white/55">• {movie.year} • {movie.type === "Movie" ? (movie.runtime ? formatMovieRuntime(movie.runtime) : "") : formatSeriesInfo(movie.totalSeasons, movie.totalEpisodes, movie.episodeRuntime)}</span>
           </div>
           <h3 className="mt-1 sm:mt-2 font-display text-2xl tracking-cinema text-white sm:text-3xl lg:text-4xl">
             {movie.title}

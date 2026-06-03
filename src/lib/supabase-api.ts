@@ -1,5 +1,6 @@
 import { supabase } from '../utils/supabase';
 import type { Movie, MoodCategory, SectionToggles } from '../types';
+import { isPGRST204Error } from '../utils/schemaValidation';
 
 // Movie API functions
 export const moviesApi = {
@@ -62,6 +63,11 @@ export const moviesApi = {
       .single();
     
     if (error) {
+      if (isPGRST204Error(error)) {
+        const errorMsg = 'Database schema is missing required Series columns. Run the latest migration to add: total_seasons, total_episodes, episode_runtime, series_status, first_air_date, last_air_date';
+        console.error('Supabase insert - Schema error:', errorMsg);
+        throw new Error(errorMsg);
+      }
       console.error('Supabase insert error:', error);
       console.error('Error details:', {
         message: error.message,
@@ -88,6 +94,11 @@ export const moviesApi = {
       .single();
     
     if (error) {
+      if (isPGRST204Error(error)) {
+        const errorMsg = 'Database schema is missing required Series columns. Run the latest migration to add: total_seasons, total_episodes, episode_runtime, series_status, first_air_date, last_air_date';
+        console.error('moviesApi.update - Schema error:', errorMsg);
+        throw new Error(errorMsg);
+      }
       console.error('moviesApi.update - Error:', error);
       console.error('Error details:', {
         message: error.message,
@@ -134,10 +145,17 @@ export const moviesApi = {
       year: data.year,
       releaseDate: data.release_date,
       runtime: data.runtime,
+      totalSeasons: data.total_seasons,
+      totalEpisodes: data.total_episodes,
+      episodeRuntime: data.episode_runtime,
+      seriesStatus: data.series_status,
+      firstAirDate: data.first_air_date,
+      lastAirDate: data.last_air_date,
       genres: data.genres,
       moods: data.moods,
       platforms: data.platforms,
       trailerUrl: data.trailer_url,
+      watchUrl: data.watch_url,
       poster: data.poster,
       backdrop: data.backdrop,
       language: data.language,
@@ -159,11 +177,18 @@ export const moviesApi = {
       rating: movie.rating,
       year: movie.year,
       release_date: movie.releaseDate || null,
-      runtime: movie.runtime,
+      runtime: movie.runtime || null,
+      total_seasons: movie.totalSeasons || null,
+      total_episodes: movie.totalEpisodes || null,
+      episode_runtime: movie.episodeRuntime || null,
+      series_status: movie.seriesStatus || null,
+      first_air_date: movie.firstAirDate || null,
+      last_air_date: movie.lastAirDate || null,
       genres: movie.genres || [],
       moods: movie.moods || [],
       platforms: movie.platforms || [],
       trailer_url: movie.trailerUrl || '',
+      watch_url: movie.watchUrl || null,
       poster: movie.poster || '',
       backdrop: movie.backdrop || '',
       language: movie.language || null,
