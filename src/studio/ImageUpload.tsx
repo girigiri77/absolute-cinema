@@ -86,7 +86,7 @@ const ImageUpload: React.FC<Props> = ({ label, value, onChange, aspect = "poster
             ? "border-fuchsia-400 bg-fuchsia-500/10"
             : "border-white/15 bg-white/[0.03] hover:border-white/25") +
           " " +
-          (aspect === "poster" ? "aspect-poster" : "aspect-backdrop")
+          (aspect === "poster" ? "aspect-[2/3]" : "aspect-[16/9]")
         }
       >
         <AnimatePresence>

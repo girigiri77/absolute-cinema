@@ -179,11 +179,11 @@ const MovieDetail: React.FC = () => {
           <div className="flex flex-col gap-6 md:grid md:gap-8 md:grid-cols-[200px_1fr]">
             {/* Poster */}
             <div className="flex justify-center md:contents">
-              <div className="overflow-hidden rounded-xl border border-white/10 shadow-[0_20px_50px_-20px_rgba(168,85,247,0.5)] w-[180px] sm:w-[200px] md:w-full">
+              <div className="aspect-[2/3] overflow-hidden rounded-3xl border border-white/10 shadow-[0_20px_50px_-20px_rgba(168,85,247,0.5)] w-[180px] sm:w-[200px] md:w-full">
                 <img
                   src={movie.poster}
                   alt={movie.title}
-                  className="aspect-poster w-full object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
